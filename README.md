@@ -19,18 +19,71 @@ For use in the browser, use [browserify](https://github.com/substack/node-browse
 To use the module,
 
 ``` javascript
-var foo = require( 'compute-incrmstdev' );
+var incrmstdev = require( 'compute-incrmstdev' );
 ```
 
-#### foo( arr )
+#### incrmstdev( window )
 
-What does this function do?
+Returns an initialized method to compute a moving sample standard deviation incrementally. `window` sets the window size, i.e., the number of values over which to compute a moving sample standard deviation.
+
+``` javascript
+var mstdev = incrmstdev( 3 );
+```
+
+#### mstdev( [value] )
+
+If provided a `value`, the method updates and returns the sample standard deviation of the current window. If not provided a `value`, the method returns the current sample standard deviation.
+
+``` javascript
+var sigma;
+
+// Filling window...
+sigma = mstdev( 2 );
+// stdev is 0
+
+mstdev( 4 );
+// stdev is ~1.414
+
+mstdev( 0 );
+// stdev is 2
+
+// Window starts sliding...
+mstdev( -2 );
+// stdev is ~3.082
+
+mstdev( -1 );
+// mstdev is 1
+
+sigma = mstdev();
+// returns 1
+```
+
+
+## Notes
+
+1. 	If values have not yet been provided to `mstdev`, `mstdev` returns `null`.
+1. 	The first `W-1` returned sample standard deviations will have less statistical support than subsequent sample standard deviations, as `W` values are needed to fill the window buffer. Until the window is full, the sample standard deviation returned equals the [sample standard deviation](https://github.com/compute-io/stdev) of all values provided thus far.
+
+The use case for this module differs from the conventional [vector](https://github.com/compute-io/mstdev) implementation and the [stream](https://github.com/flow-io/) implementation. Namely, this module decouples the act of updating the moving sample standard deviation from the act of consuming the moving sample standard deviation.
+
 
 
 ## Examples
 
 ``` javascript
-var foo = require( 'compute-incrmstdev' );
+var incrmstdev = require( 'compute-incrmstdev' );
+
+// Initialize a method to calculate the moving sample standard deviation incrementally:
+var mstdev = incrmstdev( 5 ),
+	sigma;
+
+// Simulate some data...
+for ( var i = 0; i < 1000; i++ ) {
+	sigma = mstdev( Math.random()*100 );
+	console.log( sigma );
+}
+sigma = mstdev();
+console.log( sigma );
 ```
 
 To run the example code from the top-level application directory,
