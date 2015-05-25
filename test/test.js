@@ -24,11 +24,12 @@ describe( 'compute-incrmstdev', function tests() {
 		expect( incrmstdev ).to.be.a( 'function' );
 	});
 
-	it( 'should throw an error if not provided an integer', function test() {
+	it( 'should throw an error if not provided a positive integer', function test() {
 		var values = [
 			'5',
 			-5,
 			0,
+			Math.PI,
 			true,
 			null,
 			undefined,
