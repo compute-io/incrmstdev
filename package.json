@@ -1,6 +1,6 @@
 {
   "name": "compute-incrmstdev",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Provides a method to compute a moving sample standard deviation incrementally.",
   "author": {
     "name": "Athan Reines",
